@@ -1,0 +1,54 @@
+<p>user-table Component</p>
+<h1>{{ title }}</h1>
+
+<div class="row">
+<mat-form-field appearance="fill">
+  <mat-label>Search-Type</mat-label>
+  <select matNativeControl required>
+    <option value="ID">ID</option>
+    <option value="Name">Name</option>
+    <option value="Lastname">Lastname</option>
+    <option value="Age">Age</option>
+    <option value="Birthday">Birthday</option>
+    <option value="Gender">Gender</option>
+  </select>
+</mat-form-field>
+<mat-form-field appearance="fill">
+    <mat-label>Input</mat-label>
+    <input matInput>
+  </mat-form-field>
+</div>
+
+&nbsp;<button class="btn btn-primary mb-3" (click)="openDialog()">Add data</button>
+
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ลำดับ</th>
+            <th>รหัสผู้ใช้งาน</th>
+            <th>ชื่อ-นามสกุล</th>
+            <th>วันเกิด</th>
+            <th>อายุ</th>
+            <th>เพศ</th>
+            <th>วันที่</th>
+            <th>บันทึกโดย</th>
+            <th>แก้ไข</th>
+            <th>ลบ</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of datas; let i = index">
+            <th>{{i+1}}</th>
+            <th>{{data.userId}}</th>
+            <th>{{data.name}}</th>
+            <th>{{data.birthday | date:'shortDate'}}</th>
+            <th>{{data.age}}</th>
+            <th>{{data.gender}}</th>
+            <th>{{data.createdDate | date:'shortDate'}}</th>
+            <th>{{data.createdBy}}</th>
+            <th><button type="button" class="btn btn-warning">แก้ไข</button></th>
+            <th><button type="button" class="btn btn-danger" (click)="deleteData(data.userId)">ลบ</button></th>
+        </tr>
+    </tbody>
+</table>
