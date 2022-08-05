@@ -1,5 +1,7 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, createPlatform, Inject, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { UserServiceService } from '../user-service.service';
 
 @Component({
   selector: 'app-user-model',
@@ -7,14 +9,35 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
   styleUrls: ['./user-model.component.css']
 })
 export class UserModelComponent implements OnInit {
-  
-  // constructor( public dialogRef: MatDialogRef<UserModelComponent>,
-  //   @Inject(MAT_DIALOG_DATA) public data: any, ) {}
+
+  form = new FormGroup<any>({});
+
+  constructor( 
+    private fb: FormBuilder,
+    private userService: UserServiceService,
+  ) { }
 
   ngOnInit(): void {
+    this.form = this.createInsertForm();
   }
 
-  closeDialog(): void {
-    // const dialogRef = this.dialogRef.close()
+  createInsertForm(){
+    return this.fb.group({
+      name: [""],
+      lastname: [""],
+      birthday: [""],
+      age: [""],
+      gender: [""],
+      createdBy: ["Eyy"],
+      updatedBy: ["Eyy"],
+    })
+  }
+
+  save() {
+    console.warn(this.form.value);
+    this.userService.InsertData(this.form.value).subscribe((res: any) =>{
+      console.log("insert:", res);
+      window.location.reload();    
+    })
   }
 }

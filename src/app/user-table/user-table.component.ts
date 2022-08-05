@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 
 import { UserServiceService } from '../user-service.service';
 import { UserModelComponent } from '../user-model/user-model.component';
@@ -12,21 +13,38 @@ import { UserModelComponent } from '../user-model/user-model.component';
 })
 export class UserTableComponent implements OnInit {
 
+  form = new FormGroup<any>({});
+
   title!: string;
   datas: any;
   id!: number;
+  searchType: any;
+  searchInput: any;
+  
 
   constructor(private userService: UserServiceService, 
               private dialog: MatDialog,
-              ) { }
+              private fb: FormBuilder,
+              ) 
+              {
+          
+              }
 
   ngOnInit(): void {
     this.title = 'Staff Management Table';
     this.getData();
+    this.form = this.createSearchForm();
   }
 
   openDialog(): void {
-    const dialogRef = this.dialog.open(UserModelComponent)
+    this.dialog.open(UserModelComponent)
+  } 
+
+  createSearchForm(){
+    return this.fb.group({
+      searchType: [""],
+      searchInput: [""],
+    })
   }
   
 
@@ -47,6 +65,18 @@ export class UserTableComponent implements OnInit {
         this.getData()
       }
     );
+  }
+
+  search() {
+    console.log("Search By",this.form.value.searchType, this.form.value.searchInput)
+    switch (this.form.value.searchType) {
+      case "ID":
+        this.userService.SearchById(this.form.value.searchInput).subscribe((response:any ) => {
+          this.datas = response;
+          console.log(this.datas);
+        })
+        break;
+    }
   }
 
 }
